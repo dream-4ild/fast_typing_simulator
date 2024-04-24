@@ -9,19 +9,9 @@ from src.constants import STATS_PATH, SECONDS_PER_MINUTE
 
 
 class game:
-    def __init__(self, path="", language="russian"):
-        """
-
-        :param path: the path to your text file
-        :param language:
-        """
-
-        self.text = text(path, language)
-
+    def __init__(self):
         self.window = window(self.start, self.stop, round(game.get_best_statistics(), 1))
-
-        self.path = path
-        self.language = language
+        self.text = None
 
         self.start_time = None
         self.stop_time = None
@@ -45,7 +35,7 @@ class game:
             self._refresh_text()
 
     def _refresh_text(self):
-        self.text = text(self.path, self.language)
+        self.text = text(self.window.path, self.window.language)
 
     @staticmethod
     def get_best_statistics() -> float:
@@ -66,7 +56,9 @@ class game:
         Start the game
         :return:
         """
+        self._refresh_text()
         self.window.remove_start_button()
+        self.window.remove_choose()
         self.window.add_retry_button()
 
         self.start_time = time()

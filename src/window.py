@@ -1,4 +1,6 @@
-from tkinter import Tk, Text, Button, Frame
+from tkinter import Tk, Text, Button, Frame, Label, StringVar
+from tkinter.ttk import Combobox
+from tkinter.filedialog import askopenfilename
 from queue import Queue
 
 from src.constants import *
@@ -44,12 +46,83 @@ class window:
 
         self.render_statistics(f"Your best now is {best_score}")
 
+        self.language = ""
+        self.path = ""
+
+        self._add_choose()
+
         self._add_start_button(starter)
 
         self._add_retry_button(stopper, starter)
 
         self.root.bind("<Key>", self._key_pressed)
+
         self.input_que = Queue()
+
+    def remove_choose(self):
+        self.frame_for_choosing.pack_forget()
+
+    def _add_choose(self):
+        self.frame_for_choosing = Frame(
+            self.root,
+            bg=BACKGROUND_COLOR
+        )
+        self.frame_for_choosing.pack(pady=ADD_CHOOSE_FRAME_PADX)
+
+        label_0 = Label(
+            self.frame_for_choosing,
+            text="Choose language:",
+            font=(FONT_NAME, ADD_CHOOSE_FONT_SIZE),
+            bg=BACKGROUND_COLOR
+        )
+        label_0.pack(side="left", padx=DEFAULT_PADX)
+
+        self.selected_language = StringVar()
+        self.combo_lang = Combobox(
+            self.frame_for_choosing,
+            values=AVAILABLE_LANGUAGES,
+            textvariable=self.selected_language
+        )
+
+        self.combo_lang.bind('<<ComboboxSelected>>', self._lang_selected)
+
+        self.combo_lang.pack(
+            side='left',
+            padx=DEFAULT_PADX
+        )
+
+        label_1 = Label(
+            self.frame_for_choosing,
+            text="or",
+            font=(FONT_NAME, ADD_CHOOSE_FONT_SIZE),
+            bg=BACKGROUND_COLOR
+        )
+        label_1.pack(side="left", padx=5)
+
+        self.load_file_btn = Button(
+            self.frame_for_choosing,
+            text="Load File",
+            command=self._chose_file,
+            font=(FONT_NAME, LOAD_FILE_FONT_SIZE),
+            bg=LOAD_FILE_BUTTON_BACKGROUND_COLOR
+        )
+        self.load_file_btn.pack(
+            side='left',
+            padx=DEFAULT_PADX
+        )
+
+    def _lang_selected(self, event):
+        self.language = self.selected_language.get()
+
+    def _chose_file(self):
+        filetypes = [("Text files", "*.txt")]
+        filename = askopenfilename(
+            title="Choose a file with your own text",
+            initialdir="/",
+            filetypes=filetypes
+        )
+
+        self.path = filename
 
     def _add_retry_button(self, stopper, starter):
         """
@@ -96,6 +169,9 @@ class window:
         :return:
         """
         self.start_button.pack_forget()
+
+    def remove_load_file_button(self):
+        self.load_file_btn.pack_forget()
 
     def add_retry_button(self):
         """

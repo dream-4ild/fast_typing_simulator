@@ -64,7 +64,7 @@ class window:
         self.retry_button = Button(
             frame,
             text="Retry",
-            command=lambda: (stopper(False), starter()),
+            command=lambda: (stopper(False, True), starter()),
             bg=RETRY_BUTTON_BACKGROUND_COLOR,
             font=(FONT_NAME, RETRY_BUTTON_FONT_SIZE)
         )

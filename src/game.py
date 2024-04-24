@@ -31,15 +31,20 @@ class game:
     def get_statistics(self) -> float:
         return SECONDS_PER_MINUTE * self.text.number_of_characters() / (self.stop_time - self.start_time)
 
-    def stop(self, save_statistics=True):
+    def stop(self, save_statistics=True, refresh_text=False):
         """
-        Stops the game and saves the statistics if you need.
+        Stops the game, saves the statistics and refresh text if you need.
+        :param refresh_text:
         :param save_statistics:
         :return:
         """
         self.stop_time = time()
         if save_statistics:
             self.save_statistics()
+        if refresh_text:
+            self._refresh_text()
+
+    def _refresh_text(self):
         self.text = text(self.path, self.language)
 
     @staticmethod
@@ -95,6 +100,7 @@ class game:
         except IndexError:
             self.stop()
             self.window.render_statistics(f"You score is {round(self.get_statistics(), 1)} symbols per min")
+
             self.window.root.update()
         except Exception as e:
             print(e)

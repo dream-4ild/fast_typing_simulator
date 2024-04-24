@@ -2,7 +2,7 @@ from os import listdir
 from os.path import isfile
 from random import randint
 
-from constants import DEFAULT_PATH, MAX_SYMBOLS_IN_LINE
+from src.constants import DEFAULT_PATH, MAX_SYMBOLS_IN_LINE
 
 
 class text:
@@ -22,6 +22,9 @@ class text:
             self._text = text.process_text(raw_text)
 
         self._current_line = 0
+
+    def number_of_characters(self):
+        return sum(len(elem) for elem in self._text)
 
     @staticmethod
     def process_text(raw_text: str) -> list[str]:

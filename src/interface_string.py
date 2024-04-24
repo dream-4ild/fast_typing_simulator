@@ -1,4 +1,4 @@
-from constants import CORRECT_COLOR, INCORRECT_COLOR, NEUTRAL_COLOR
+from src.constants import CORRECT_COLOR, INCORRECT_COLOR, NEUTRAL_COLOR
 
 
 class interface_string:

@@ -1,15 +1,16 @@
 from tkinter import Tk, Text, Button, Frame
-
-from constants import *
-from interface_string import interface_string
 from queue import Queue
+
+from src.constants import *
+from src.interface_string import interface_string
 
 
 class window:
-    def __init__(self, starter, stopper):
+    def __init__(self, starter, stopper, best_score: float):
         """
         :param starter: method to start the window
         :param stopper: method to stop the window
+        :param best_score: best score of game
         """
         self.root = Tk()
         self.root.geometry(f"{WIDTH}x{HEIGHT}")
@@ -41,6 +42,8 @@ class window:
         self.text_widget_0.pack()
         self.text_widget_1.pack()
 
+        self.render_statistics(f"Your best now is {best_score}")
+
         self._add_start_button(starter)
 
         self._add_retry_button(stopper, starter)
@@ -61,7 +64,7 @@ class window:
         self.retry_button = Button(
             frame,
             text="Retry",
-            command=lambda: (stopper(), starter()),
+            command=lambda: (stopper(False), starter()),
             bg=RETRY_BUTTON_BACKGROUND_COLOR,
             font=(FONT_NAME, RETRY_BUTTON_FONT_SIZE)
         )
@@ -150,3 +153,15 @@ class window:
             copy_attr.insert("end", elem[0], ("center", tag_name))
 
         copy_attr.configure(state='disabled')
+
+    def render_statistics(self, message: str):
+
+        self.text_widget_1.configure(state='normal')
+
+        self.text_widget_1.delete('1.0', 'end')
+
+        self.text_widget_1.tag_configure("curr_tag", foreground=STATS_COLOR, justify='center')
+
+        self.text_widget_1.insert("end", message, ("center", "curr_tag"))
+
+        self.text_widget_1.configure(state='disabled')

@@ -1,4 +1,4 @@
-from game import game
+from src.game import game
 
 if __name__ == '__main__':
     gm = game()

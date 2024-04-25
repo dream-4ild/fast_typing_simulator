@@ -41,7 +41,7 @@ class window:
         self.text_widget_0.tag_configure("center", justify='center')
         self.text_widget_1.tag_configure("center", justify='center')
 
-        self.text_widget_0.pack(pady=30)
+        self.text_widget_0.pack(pady=LINES_PADY)
         self.text_widget_1.pack()
 
         self.render_statistics(f"Your best now is {best_score}")

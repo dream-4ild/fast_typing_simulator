@@ -41,7 +41,7 @@ class window:
         self.text_widget_0.tag_configure("center", justify='center')
         self.text_widget_1.tag_configure("center", justify='center')
 
-        self.text_widget_0.pack()
+        self.text_widget_0.pack(pady=30)
         self.text_widget_1.pack()
 
         self.render_statistics(f"Your best now is {best_score}")
@@ -78,13 +78,14 @@ class window:
         label_0.pack(side="left", padx=DEFAULT_PADX)
 
         self.selected_language = StringVar()
+        self.selected_language.set(DEFAULT_LANGUAGE)
         self.combo_lang = Combobox(
             self.frame_for_choosing,
             values=AVAILABLE_LANGUAGES,
-            textvariable=self.selected_language
+            textvariable=self.selected_language,
+            state="readonly",
         )
-
-        self.combo_lang.bind('<<ComboboxSelected>>', self._lang_selected)
+        self.combo_lang.set(DEFAULT_LANGUAGE)
 
         self.combo_lang.pack(
             side='left',
@@ -111,7 +112,7 @@ class window:
             padx=DEFAULT_PADX
         )
 
-    def _lang_selected(self, event):
+    def _lang_selected(self):
         self.language = self.selected_language.get()
 
     def _chose_file(self):
@@ -149,13 +150,13 @@ class window:
         :return:
         """
         frame = Frame(self.root, bg=BACKGROUND_COLOR)
-        frame.place(relx=0.5, rely=0.5, anchor='center')
+        frame.place(relx=0.5, rely=0.6, anchor='center')
 
         self.start_button = Button(
             frame,
             text="Start",
             bg=START_BUTTON_BACKGROUND_COLOR,
-            command=starter,
+            command=lambda: (self._lang_selected(), starter()),
             font=(FONT_NAME, START_BUTTON_FONT_SIZE),
             width=20,
             height=2

@@ -35,3 +35,4 @@ ADD_CHOOSE_FONT_SIZE = 16
 DEFAULT_PADX = 5
 
 AVAILABLE_LANGUAGES = ["russian", "english"]
+DEFAULT_LANGUAGE = "russian"

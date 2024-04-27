@@ -7,6 +7,8 @@ pip install -r requirements.txt &&
 python3 start.py
 ```
 
+# Если масштаб экрана не 100% - UB!
+
 # `window` Class Documentation
 
 ## Overview

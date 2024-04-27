@@ -10,6 +10,13 @@ class interface_string:
         self._last_correct = -1
         self._first_neutral = 0
 
+    def get_current_symbol_and_color(self) -> tuple[str, str]:
+        """
+        :return: current symbol and it's color
+        """
+        return self._string[self._last_correct + 1], (
+            NEUTRAL_COLOR if self._last_correct == self._first_neutral - 1 else INCORRECT_COLOR)
+
     def get_string_with_color(self) -> list[(str, str)]:
         """
         Returns the string as blocks of colors

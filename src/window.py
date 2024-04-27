@@ -37,12 +37,42 @@ class window:
 
         self._add_stat_field()
 
+        self._add_main_word_field()
+
         self.root.bind("<Key>", self._key_pressed)
 
         self.input_que = Queue()
 
     def remove_stat_field(self):
         self.stat_field.pack_forget()
+
+    def _add_main_word_field(self):
+        self.main_word_field = Text(
+            self.root,
+            width=5,
+            height=1,
+            borderwidth=0,
+            highlightthickness=0,
+            bg=BACKGROUND_COLOR,
+            font=(FONT_NAME, MAIN_WORD_FONT_SIZE)
+        )
+
+    def add_main_word_field(self):
+        self.main_word_field.pack(side='top', pady=MAIN_WORD_PADY)
+
+    def render_main_word(self, word: str, color: str):
+        self.main_word_field.configure(state='normal')
+        tag_name = "some_tag"
+        self.main_word_field.tag_configure(tag_name, foreground=color, justify='center')
+
+        self.main_word_field.delete('1.0', 'end')
+
+        self.main_word_field.insert("end", word if word != ' ' else "space", ("center", tag_name))
+
+        self.main_word_field.configure(state='disabled')
+
+    def remove_main_word_field(self):
+        self.main_word_field.pack_forget()
 
     def _add_stat_field(self):
         self.stat_field = Text(

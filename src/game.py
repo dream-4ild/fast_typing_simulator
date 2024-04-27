@@ -37,6 +37,7 @@ class game:
             self._refresh_text()
 
         self.window.remove_stat_field()
+        self.window.remove_main_word_field()
 
     def _refresh_text(self):
         self.text = text(self.window.path, self.window.language)
@@ -65,6 +66,7 @@ class game:
         self.window.remove_choose()
         self.window.add_retry_button()
         self.window.add_stat_field()
+        self.window.add_main_word_field()
 
         self.count_of_current_chars = 0
 
@@ -102,6 +104,7 @@ class game:
                     self.window.render_interface_string(side_string, 1)
 
                     need_next_line = False
+                self.window.render_main_word(*main_string.get_current_symbol_and_color())
         except TclError:
             pass
         except IndexError:

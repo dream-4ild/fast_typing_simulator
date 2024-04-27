@@ -13,9 +13,9 @@ class text:
         """
         if path == "":
             path = DEFAULT_PATH + language + "/"
-            count_files = sum(isfile(elem) for elem in listdir(path))
+            count_files = sum(elem.endswith('.txt') for elem in listdir(path))
 
-            path += "/default_text_" + f"{randint(0, count_files + 1)}.txt"
+            path += "/default_text_" + f"{randint(0, count_files - 1)}.txt"
 
         with open(path, "r") as file:
             raw_text = file.read()
@@ -33,7 +33,7 @@ class text:
         :param raw_text: any text
         :return: list of strings with a length of no more than MAX_SYMBOLS_IN_LINE
         """
-        raw_text = raw_text.replace("\r", " ").replace("\t", " ")
+        raw_text = raw_text.replace("\r", " ").replace("\t", " ").replace("«", '"').replace("»", '"').replace("–", "-")
 
         ans = []
 

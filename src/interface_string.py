@@ -18,11 +18,12 @@ class interface_string:
                 (self._string[self._last_correct + 1:self._first_neutral], INCORRECT_COLOR),
                 (self._string[self._first_neutral:], NEUTRAL_COLOR)]
 
-    def enter_symbol(self, symbol: str) -> bool:
+    def enter_symbol(self, symbol: str) -> tuple[bool, bool]:
         """
         Checks if the symbol entered is correct.
         :param symbol: entered symbol
-        :return: True if the symbol entered correct && it was the last symbol in string, False otherwise
+        :return: (True if the symbol entered correct && it was the last symbol in string, False otherwise;
+                                                                        True if the symbol entered correct)
         """
 
         if symbol == self._string[self._last_correct + 1]:
@@ -31,8 +32,8 @@ class interface_string:
 
             self._last_correct += 1
 
-            return self._first_neutral == len(self._string)
+            return self._first_neutral == len(self._string), True
         else:
             if self._first_neutral == self._last_correct + 1:
                 self._first_neutral += 1
-            return False
+            return False, False

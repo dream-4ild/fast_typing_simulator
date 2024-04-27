@@ -10,8 +10,8 @@ from src.interface_string import interface_string
 class window:
     def __init__(self, starter, stopper, best_score: float):
         """
-        :param starter: method to start the window
-        :param stopper: method to stop the window
+        :param starter: method to start the game
+        :param stopper: method to stop the game
         :param best_score: best score of game
         """
         self.root = Tk()
@@ -19,6 +19,46 @@ class window:
         self.root.title("fast typing")
         self.root.configure(background=BACKGROUND_COLOR)
 
+        self.text_widget_0 = None
+        self.text_widget_1 = None
+        self._add_text_fields()
+
+        self.render_statistics(f"Your best now is {best_score}")
+
+        self.language = ""
+        self.path = ""
+        self.stat_field = None
+
+        self._add_choose()
+
+        self._add_start_button(starter)
+
+        self._add_retry_button(stopper, starter)
+
+        self._add_stat_field()
+
+        self.root.bind("<Key>", self._key_pressed)
+
+        self.input_que = Queue()
+
+    def remove_stat_field(self):
+        self.stat_field.pack_forget()
+
+    def _add_stat_field(self):
+        self.stat_field = Text(
+            self.root,
+            width=10,
+            height=1,
+            borderwidth=0,
+            highlightthickness=0,
+            bg=BACKGROUND_COLOR,
+            font=(FONT_NAME, STATS_FONT_SIZE)
+        )
+
+    def add_stat_field(self):
+        self.stat_field.pack(side='bottom', anchor='w')
+
+    def _add_text_fields(self):
         self.text_widget_0 = Text(
             self.root,
             width=MAX_SYMBOLS_IN_LINE,
@@ -43,21 +83,6 @@ class window:
 
         self.text_widget_0.pack(pady=LINES_PADY)
         self.text_widget_1.pack()
-
-        self.render_statistics(f"Your best now is {best_score}")
-
-        self.language = ""
-        self.path = ""
-
-        self._add_choose()
-
-        self._add_start_button(starter)
-
-        self._add_retry_button(stopper, starter)
-
-        self.root.bind("<Key>", self._key_pressed)
-
-        self.input_que = Queue()
 
     def remove_choose(self):
         self.frame_for_choosing.pack_forget()
@@ -242,3 +267,14 @@ class window:
         self.text_widget_1.insert("end", message, ("center", "curr_tag"))
 
         self.text_widget_1.configure(state='disabled')
+
+    def render_current_statistics(self, stat: float):
+        self.stat_field.configure(state='normal')
+        tag_name = "some_tag"
+        self.stat_field.tag_configure(tag_name, foreground=STATS_COLOR, justify='center')
+
+        self.stat_field.delete('1.0', 'end')
+
+        self.stat_field.insert("end", str(stat), ("center", tag_name))
+
+        self.stat_field.configure(state='disabled')

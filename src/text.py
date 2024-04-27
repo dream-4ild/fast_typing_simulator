@@ -19,15 +19,12 @@ class text:
 
         with open(path, "r") as file:
             raw_text = file.read()
-            self._text = text.process_text(raw_text)
+            self._text = text._process_text(raw_text)
 
         self._current_line = 0
 
-    def number_of_characters(self):
-        return sum(len(elem) for elem in self._text)
-
     @staticmethod
-    def process_text(raw_text: str) -> list[str]:
+    def _process_text(raw_text: str) -> list[str]:
         """
         Processes the raw text and returns a list of strings.
         :param raw_text: any text
@@ -48,6 +45,8 @@ class text:
 
             if current_text != "":
                 ans.append(current_text + " ")
+
+        ans[-1] = ans[-1][:-1]
 
         return ans
 

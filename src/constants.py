@@ -17,7 +17,6 @@ def set_size():
     HEIGHT = int(monitor.height * 0.625)
 
     MAX_SYMBOLS_IN_LINE = (WIDTH - 2 * INDENT) // MAIN_FONT_SIZE
-    print(MAX_SYMBOLS_IN_LINE)
     ADD_CHOOSE_FRAME_PADX = HEIGHT // 8
     MAIN_WORD_PADY = HEIGHT // 7
 
@@ -51,7 +50,6 @@ STATS_PATH = "./bin/statistics.txt"
 STATS_COLOR = "#228B22"
 STATS_UPDATE_FREQUENCY = 50  # every ?? ticks
 STATS_FONT_SIZE = 30
-
 
 ADD_CHOOSE_FONT_SIZE = 16
 

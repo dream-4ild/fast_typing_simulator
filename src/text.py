@@ -41,13 +41,13 @@ class text:
             current_text = ""
             for word in row.split(" "):
                 if len(current_text) + len(word) + 1 > MAX_SYMBOLS_IN_LINE:
-                    ans.append(current_text)
+                    ans.append(current_text + " ")
                     current_text = ""
 
                 current_text += (" " if len(current_text) > 0 else "") + word
 
             if current_text != "":
-                ans.append(current_text)
+                ans.append(current_text + " ")
 
         return ans
 

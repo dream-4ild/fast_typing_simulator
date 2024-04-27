@@ -1,14 +1,9 @@
-from src.game import game
-from screeninfo import get_monitors
-from src.constants import WIDTH, HEIGHT
+from src.constants import set_size
 
 if __name__ == '__main__':
-    monitor = get_monitors()[0]
+    set_size()
 
-    WIDTH = int(monitor.width * 0.625)
-    HEIGHT = int(monitor.height * 0.625)
+    from src.game import game
 
     gm = game()
     print("Good buy!")
-
-

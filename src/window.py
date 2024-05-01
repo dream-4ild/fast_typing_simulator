@@ -1,13 +1,13 @@
-from tkinter import Tk, Text, Button, Frame, Label, StringVar
-from tkinter.ttk import Combobox
-from tkinter.filedialog import askopenfilename
 from queue import Queue
+from tkinter import Tk, Text, Button, Frame, Label, StringVar
+from tkinter.filedialog import askopenfilename
+from tkinter.ttk import Combobox
 
 from src.constants import *
-from src.interface_string import interface_string
+from src.interface_string import InterfaceString
 
 
-class window:
+class Window:
     def __init__(self, starter, stopper, best_score: float):
         """
         :param starter: method to start the game
@@ -15,9 +15,8 @@ class window:
         :param best_score: best score of game
         """
         self.root = Tk()
-        self.root.geometry(f"{WIDTH}x{HEIGHT}")
-        self.root.title("fast typing")
-        self.root.configure(background=BACKGROUND_COLOR)
+
+        self._config_root()
 
         self.text_widget_0 = None
         self.text_widget_1 = None
@@ -42,6 +41,15 @@ class window:
         self.root.bind("<Key>", self._key_pressed)
 
         self.input_que = Queue()
+
+    def _config_root(self):
+        """
+        Configure the root window.
+        :return:
+        """
+        self.root.geometry(f"{WIDTH}x{HEIGHT}")
+        self.root.title("fast typing")
+        self.root.configure(background=BACKGROUND_COLOR)
 
     def _add_text_fields(self):
         self.text_widget_0 = Text(
@@ -69,7 +77,7 @@ class window:
         self.text_widget_0.pack(pady=LINES_PADY)
         self.text_widget_1.pack()
 
-    def render_interface_string(self, string: interface_string, number: int):
+    def render_interface_string(self, string: InterfaceString, number: int):
         """
         :param string: string to render
         :param number: which one is on top
@@ -103,21 +111,11 @@ class window:
 
         self.path = filename
 
-    def _add_choose(self):
-        self.frame_for_choosing = Frame(
-            self.root,
-            bg=BACKGROUND_COLOR
-        )
-        self.frame_for_choosing.pack(pady=ADD_CHOOSE_FRAME_PADX)
-
-        label_0 = Label(
-            self.frame_for_choosing,
-            text="Choose language:",
-            font=(FONT_NAME, ADD_CHOOSE_FONT_SIZE),
-            bg=BACKGROUND_COLOR
-        )
-        label_0.pack(side="left", padx=DEFAULT_PADX)
-
+    def _add_combox_selecting_language(self):
+        """
+        Adding ttk.Combox for selecting language.
+        :return:
+        """
         self.selected_language = StringVar()
         self.selected_language.set(DEFAULT_LANGUAGE)
         self.combo_lang = Combobox(
@@ -133,14 +131,11 @@ class window:
             padx=DEFAULT_PADX
         )
 
-        label_1 = Label(
-            self.frame_for_choosing,
-            text="or",
-            font=(FONT_NAME, ADD_CHOOSE_FONT_SIZE),
-            bg=BACKGROUND_COLOR
-        )
-        label_1.pack(side="left", padx=5)
-
+    def _add_button_for_choosing_file(self):
+        """
+         Adding button fot choose your own file.txt.
+        :return:
+        """
         self.load_file_btn = Button(
             self.frame_for_choosing,
             text="Load File",
@@ -152,6 +147,33 @@ class window:
             side='left',
             padx=DEFAULT_PADX
         )
+
+    def _add_choose(self):
+        self.frame_for_choosing = Frame(
+            self.root,
+            bg=BACKGROUND_COLOR
+        )
+        self.frame_for_choosing.pack(pady=ADD_CHOOSE_FRAME_PADX)
+
+        label_0 = Label(
+            self.frame_for_choosing,
+            text="Choose language:",
+            font=(FONT_NAME, ADD_CHOOSE_FONT_SIZE),
+            bg=BACKGROUND_COLOR
+        )
+        label_0.pack(side="left", padx=DEFAULT_PADX)
+
+        self._add_combox_selecting_language()
+
+        label_1 = Label(
+            self.frame_for_choosing,
+            text="or",
+            font=(FONT_NAME, ADD_CHOOSE_FONT_SIZE),
+            bg=BACKGROUND_COLOR
+        )
+        label_1.pack(side="left", padx=5)
+
+        self._add_button_for_choosing_file()
 
     def remove_choose(self):
         self.frame_for_choosing.pack_forget()

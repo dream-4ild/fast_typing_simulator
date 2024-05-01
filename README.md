@@ -1,9 +1,14 @@
 # Launch
+### first_launch
 ```bash
 git clone https://github.com/dream-4ild/fast_typing_simulator.git &&
 cd fast_typing_simulator &&
 git checkout development &&
 pip install -r requirements.txt &&
+python3 start.py
+```
+### then in the same console
+```bash
 python3 start.py
 ```
 
@@ -30,6 +35,18 @@ Initializes a new instance of the `window` class.
 Creates the main window, configures its properties, and sets up the game interface.
 
 ## Methods
+
+### `_config_root(self)`
+
+Configure the root window.
+
+### `_add_combox_selecting_language(self)`
+
+Adding ttk.Combox for selecting language.
+
+### `_add_button_for_choosing_file(self)`
+
+Adding button fot choose your own file.txt.
 
 ### `_add_text_fields(self)`
 
@@ -176,6 +193,16 @@ Static method to retrieve the best statistics from the statistics file.
 ### `_save_statistics(self)`
 
 Compares the current game statistics to the best score and updates the statistics file if the current score is better.
+
+### `_prepare_start(self)`
+
+Preparing the game start.
+#### Returns:
+- tuple of main and side string
+
+### `_main_event_handler(self, main_string: InterfaceString, side_string: InterfaceString`
+
+Main event handler
 
 ### `start(self)`
 

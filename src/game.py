@@ -1,16 +1,15 @@
-from time import sleep
+from time import sleep, time
 from tkinter import TclError
-from time import time
 
-from src.window import window
-from src.interface_string import interface_string
-from src.text import text
 from src.constants import STATS_PATH, SECONDS_PER_MINUTE, STATS_UPDATE_FREQUENCY
+from src.interface_string import InterfaceString
+from src.text import Text
+from src.window import Window
 
 
-class game:
+class Game:
     def __init__(self):
-        self.window = window(self.start, self._stop, round(game._get_best_statistics(), 1))
+        self.window = Window(self.start, self._stop, round(Game._get_best_statistics(), 1))
         self.text = None
 
         self.start_time = None
@@ -49,7 +48,7 @@ class game:
         Refreshes the text field
         :return: 
         """
-        self.text = text(self.window.path, self.window.language)
+        self.text = Text(self.window.path, self.window.language)
 
     @staticmethod
     def _get_best_statistics() -> float:
@@ -61,7 +60,7 @@ class game:
             return float(file.read().replace('\n', ''))
 
     def _save_statistics(self):
-        prev_score = game._get_best_statistics()
+        prev_score = Game._get_best_statistics()
 
         curr_score = self._get_statistics()
 
@@ -69,10 +68,10 @@ class game:
             with open(STATS_PATH, 'w') as file:
                 file.write(f"{curr_score}\n")
 
-    def start(self):
+    def _prepare_start(self) -> tuple[InterfaceString, InterfaceString]:
         """
-        Start the game
-        :return:
+        Preparing the game start
+        :return: tuple of main and side string
         """
         self._refresh_text()
         self.window.remove_start_button()
@@ -85,39 +84,52 @@ class game:
 
         self.start_time = time()
 
-        main_string = interface_string(self.text.get_string())
+        main_string = InterfaceString(self.text.get_string())
         self.window.render_interface_string(main_string, 0)
 
-        side_string = interface_string(self.text.get_string())
+        side_string = InterfaceString(self.text.get_string())
         self.window.render_interface_string(side_string, 1)
 
+        return main_string, side_string
+
+    def _main_event_handler(self, main_string: InterfaceString, side_string: InterfaceString):
+        need_next_line = False
         counter_for_render_current_statistics = 0
 
-        try:
-            need_next_line = False
-            while True:
-                elem = self.window.get_symbol()
-                if elem is not None:
-                    need_next_line, correct = main_string.enter_symbol(elem)
-                    self._count_of_current_chars += correct
+        while True:
+            elem = self.window.get_symbol()
+            if elem is not None:
+                need_next_line, correct = main_string.enter_symbol(elem)
+                self._count_of_current_chars += correct
 
+            self.window.render_interface_string(main_string, 0)
+
+            sleep(0.01)
+            counter_for_render_current_statistics += 1
+            self.window.root.update()
+
+            if counter_for_render_current_statistics % STATS_UPDATE_FREQUENCY == 0:
+                self.window.render_current_statistics(round(self._get_statistics(False), 1))
+
+            if need_next_line:
+                main_string = side_string
+                side_string = InterfaceString(self.text.get_string())
                 self.window.render_interface_string(main_string, 0)
+                self.window.render_interface_string(side_string, 1)
 
-                sleep(0.01)
-                counter_for_render_current_statistics += 1
-                self.window.root.update()
+                need_next_line = False
+            self.window.render_main_word(*main_string.get_current_symbol_and_color())
 
-                if counter_for_render_current_statistics % STATS_UPDATE_FREQUENCY == 0:
-                    self.window.render_current_statistics(round(self._get_statistics(False), 1))
+    def start(self):
+        """
+        Start the game
+        :return:
+        """
 
-                if need_next_line:
-                    main_string = side_string
-                    side_string = interface_string(self.text.get_string())
-                    self.window.render_interface_string(main_string, 0)
-                    self.window.render_interface_string(side_string, 1)
+        main_string, side_string = self._prepare_start()
 
-                    need_next_line = False
-                self.window.render_main_word(*main_string.get_current_symbol_and_color())
+        try:
+            self._main_event_handler(main_string, side_string)
         except TclError:
             pass
         except IndexError:
@@ -125,7 +137,5 @@ class game:
             self.window.render_statistics(f"Your score {round(self._get_statistics(), 1)} symbols per min")
 
             self.window.root.update()
-        except Exception as e:
-            print(e)
 
         self.window.start()

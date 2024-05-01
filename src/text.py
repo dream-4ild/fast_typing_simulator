@@ -1,11 +1,10 @@
 from os import listdir
-from os.path import isfile
 from random import randint
 
 from src.constants import DEFAULT_PATH, MAX_SYMBOLS_IN_LINE
 
 
-class text:
+class Text:
     def __init__(self, path: str, language: str):
         """
         :param path:
@@ -19,7 +18,7 @@ class text:
 
         with open(path, "r") as file:
             raw_text = file.read()
-            self._text = text._process_text(raw_text)
+            self._text = Text._process_text(raw_text)
 
         self._current_line = 0
 
